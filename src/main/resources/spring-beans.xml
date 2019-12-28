@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!-- 1.创建数据源 -->
+    <bean id="dataSourceA" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql:/192.168.43.3//student"/>
+        <property name="username" value="root"/>
+        <property name="password" value="123456"/>
+    </bean>
+    <bean id="dataSourceB" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql:///bumen"/>
+        <property name="username" value="root"/>
+        <property name="password" value="accp"/>
+    </bean>
+    <!--2.创建会话工厂-->
+    <bean id="sqlSessionFactoryA" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--加载数据源-->
+        <property name="dataSource" ref="dataSourceA"/>
+        <!--加载映射文件路径-->
+        <property name="mapperLocations" value="classpath*:mapper/studentMapper/studentMapper.xml"/>
+    </bean>
+    <bean id="sqlSessionFactoryB" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--加载数据源-->
+        <property name="dataSource" ref="dataSourceB"/>
+        <!--加载映射文件路径-->
+        <property name="mapperLocations" value="classpath*:mapper/bumenMapper/bumenMapper.xml"/>
+    </bean>
+    <!--3.注册映射文件接口-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!--指定会话工厂-->
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactoryA"/>
+        <!--扫描映射器接口-->
+        <property name="basePackage" value="com.lry.dao.studentDao"/>
+    </bean>
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!--指定会话工厂-->
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactoryB"/>
+        <!--扫描映射器接口-->
+        <property name="basePackage" value="com.lry.dao.bumenDao"/>
+    </bean>
+</beans>
